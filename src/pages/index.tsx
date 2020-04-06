@@ -1,11 +1,11 @@
+import { Sky } from '../components/Drawing'
 
 const Home = () => {
 
     return (
-        <div>
-            <h1> Hello world </h1>
-        </div>
+        <Sky />
     )
 }
+
 
 export default Home

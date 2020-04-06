@@ -20,9 +20,11 @@ class NextSite extends Document {
       <Html lang="en">
         <Head>
           <link rel="shortcut icon" href="/assets/favicon.png" />
+          <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+          <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
           <meta
             name="viewport"
-            content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, user-scalable=yes"
+            content="minimum-scale=1, initial-scale=1, width=device-width"
           />
           <meta name="description" content="my99n's personal site" />
         </Head>
