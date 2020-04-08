@@ -8,9 +8,10 @@ const config = {
     cloudInitPos : 50,
     cloudMinWidth : 200,
     cloudMaxWidth : 300,
-    sun : 'sun',
-    moon : 'moon',
-    cloud1 : {x:250, y:220},
+    sun : 'sun.gif',
+    moon : 'moon.png',
+    cloud1 : {x:250, y:70},
+    cloud2 : {x:-350, y:120},
 }
 
 const Float = (props:Prop) => (
@@ -37,7 +38,7 @@ const Cloud = (props:Prop) => {
                 maxW={`${props.maxW}px`}
                 className={`cloud${props.id}`}
             >
-                <Image name='cloud' />
+                <Image name={`cloud${props.id+1}.gif`} />
             </Box>
         </Draggable>
     )
@@ -47,6 +48,7 @@ const Clouds = (props:Prop) => {
     return (
         <>
             <Cloud id={1} minW={props.minW} maxW={props.maxW} initPos={config.cloud1}/>
+            <Cloud id={2} minW={props.minW} maxW={props.maxW} initPos={config.cloud2}/>
         </>
     )
 }
@@ -60,7 +62,7 @@ const StaticSky = (props:Prop) => {
         Element = <Float type={config.moon} />
     }
     else {
-        background = 'blue.200'
+        background = 'blue.100'
         Element = <Float type={config.sun} />
     }
 

@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react'
 export const Image = (props:Prop) => (
         <ChakraImage
             width="100%"
-            src={`assets/${props.name}.png`}
+            src={`assets/${props.name}`}
             alt={props.name}
             onDragStart={(e) => {
                 e.preventDefault();
