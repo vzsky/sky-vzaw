@@ -1,10 +1,11 @@
+
 import React from 'react'
 import { AppProps } from 'next/app'
 import Head from 'next/head'
 
 import { Global, css } from '@emotion/core'
 import { CSSReset, ThemeProvider } from '@chakra-ui/core'
-import '../../public/style/style.css'
+import customTheme from '../theme'
 
 const Full = () => (
     <Global
@@ -20,7 +21,7 @@ const Full = () => (
 )
 export default ({ Component, pageProps }: AppProps) => {
     return (
-        <ThemeProvider>
+        <ThemeProvider theme={customTheme}>
             <Head>
                 <title>my99n</title>
             </Head>

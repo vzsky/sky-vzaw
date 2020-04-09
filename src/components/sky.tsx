@@ -1,106 +1,103 @@
 import { useState } from 'react'
-import { Flex, Box } from "@chakra-ui/core";
-import Draggable from 'react-draggable'
-import { Prop, Image } from './utils'
+import {
+    Flex,
+    Box,
+    Text,
+} from '@chakra-ui/core'
+import {
+    Prop,
+    useWindowSize,
+    Image,
+    Draggable,
+} from '../helper'
+import { config } from '../theme'
+const settings = config.home
 
-const config = {
-    floatSize : 150,
-    cloudInitPos : 50,
-    cloudMinWidth : 200,
-    cloudMaxWidth : 300,
-    sun : 'sun.gif',
-    moon : 'moon.png',
-    cloud1 : {x:250, y:70},
-    cloud2 : {x:-350, y:120},
-}
-
-const Float = (props:Prop) => (
-    <Box 
-        flex={`0 0 ${config.floatSize}px`}
-    >
-        <Image name={props.type}/>
+const Sun = (props:Prop) => (
+    <Box width='20%' maxW='200px' position='absolute' top={props.top} left={props.left}>
+        <Image onClick={props.toggleMode} src={settings.sun}/>
     </Box>
 )
 
-const Cloud = (props:Prop) => {
+const Moon = (props:Prop) => (
+    <Box width='20%' maxW='200px' position='absolute' top={props.top} left={props.left}>
+        <Image onClick={props.toggleMode} src={settings.moon}/>
+    </Box>
+)
 
+const Cloud = (props:Prop) => (
+    <Draggable handle = '.drag'>
+        <Box className = 'drag' width='25%' maxW='250px' position='absolute' top={props.top} left={props.left}>
+            <Image src={settings.cloud[props.order]} />
+        </Box>
+    </Draggable>
+)
+
+const Wave = (props:Prop) => (
+    <Draggable handle = {`.drag`}>
+        <Box className='drag' width='25%' maxW='350px' position='absolute' top={props.top} left={props.left}>
+            <Image src={settings.wave} />
+        </Box>
+    </Draggable>
+)
+
+const Horizontal = (props:Prop) => {
+    let bg:string = props.mode === 'night'
+        ? settings.nightbg
+        : settings.daybg
+    let Float:JSX.Element = props.mode === 'night'
+        ? <Moon toggleMode={props.toggleMode} top='10%' left='5%'/>
+        : <Sun toggleMode={props.toggleMode} top='10%' left='5%'/>
     return (
-        <Draggable
-            axis="x"
-            handle={`.cloud${props.id}`}
-            defaultPosition={{x: props.initPos.x, y: props.initPos.y}}
-            scale={1.5}
-            {...props}
-        >
-            <Box 
-                width='100%'
-                minW={`${props.minW}px`}
-                maxW={`${props.maxW}px`}
-                className={`cloud${props.id}`}
-            >
-                <Image name={`cloud${props.id+1}.gif`} />
-            </Box>
-        </Draggable>
+        <Box width='100%' height='100%' bg={bg}>
+            {Float}
+            <Cloud order={1} top='10%' left='60%' />
+            <Cloud order={2} top='30%' left='75%' />
+            <Wave top='50%' left='30%'/>
+            <Wave top='70%' left='10%'/>
+            <Wave top='70%' left='50%'/>
+        </Box>
     )
 }
 
-const Clouds = (props:Prop) => {
+const Vertical = (props:Prop) => (
+    <Box width='100%' height='100%' bg={props.bg}>
+        <Text> Under Development </Text>
+    </Box>
+)
+
+const Sky =  () => {
+    const window = useWindowSize();
+    const [mode, setMode] = useState('day')
+
+    let direction = (window.width > window.height)
+        ? 'horizontal'
+        : 'vertical'
+
+    const toggleMode = () => {
+        let newmode = mode === 'night'
+            ? 'day'
+            : 'night'
+        setMode(newmode)
+    }
+
+    if (direction === 'horizontal')
+        return <Horizontal toggleMode={toggleMode} mode={mode}/>
+    if (direction === 'vertical')
+        return <Vertical toggleMode={toggleMode} mode={mode}/>
+
     return (
-        <>
-            <Cloud id={1} minW={props.minW} maxW={props.maxW} initPos={config.cloud1}/>
-            <Cloud id={2} minW={props.minW} maxW={props.maxW} initPos={config.cloud2}/>
-        </>
+        <Box>
+            <Text>Ahh, Internal server error I supposed.</Text>
+            <Text>The dev need sleep, provide him some...</Text>
+        </Box>
     )
 }
 
-const StaticSky = (props:Prop) => {
-    let background:string
-    let Element:JSX.Element
-    
-    if (props.mode === 'night') {
-        background = 'gray.500'
-        Element = <Float type={config.moon} />
-    }
-    else {
-        background = 'blue.100'
-        Element = <Float type={config.sun} />
-    }
-
+export default () => {
     return (
-        <Flex
-            width='100%'
-            height = "100%"
-            p={5}
-            overflow='hidden'
-            bg={background}
-        >
-            {Element}
-            <Cloud id={0} minW={config.cloudMinWidth} maxW={config.cloudMaxWidth} initPos={props.cloudInitPos} onDrag={props.onDragCloud}/>
-            <Clouds minW={config.cloudMinWidth} maxW={config.cloudMaxWidth} />
+        <Flex width='100%' height='100%' overflowX='hidden'>
+            <Sky /> 
         </Flex>
-    )
-}
-
-export default (props:Prop) => {
-
-    const {floatSize, cloudInitPos} = config
-
-    const [skyTime, setSkyTime] = useState('day')
-    const [cloudPos, setCloudPos] = useState(cloudInitPos)
-
-    const onDragCloud = (e:any, ui:any) => {
-        setCloudPos(ui.x)
-        if (cloudPos <= -floatSize && skyTime !== 'night') {
-            setSkyTime('night')
-            props.whenNight()
-        }
-    }
-
-    return (
-        <StaticSky
-            mode={skyTime}
-            onDragCloud={onDragCloud} 
-            cloudInitPos={{x:cloudInitPos, y:0}}
-        />
     )
 }

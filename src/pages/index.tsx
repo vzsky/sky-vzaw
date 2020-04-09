@@ -1,15 +1,14 @@
 import Sky from '../components/sky'
+import Profile from '../components/Profile'
 
-const Home = () => {
+import ReactPageScroller from "react-page-scroller"
 
-    const whenNight = () => {
-        console.log('Night, do something next')
-    }
-
-    return (
-        <Sky whenNight={whenNight}/>
-    )
-}
-
+const Home = () => (
+    // <ReactPageScroller>
+    //     <Sky />
+    //     <Profile />
+    // </ReactPageScroller>
+    <Sky/>
+)
 
 export default Home
